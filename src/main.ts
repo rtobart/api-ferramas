@@ -1,8 +1,22 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
+import * as express from 'express';
+import { ConfigService } from '@nestjs/config';
+import helmet from 'helmet';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  await app.listen(3000);
+  app.use(express.json({ limit: '10mb' }));
+  app.use(express.urlencoded({ limit: '10mb', extended: true }));
+  app.setGlobalPrefix('api');
+  const configService = app.get(ConfigService);
+  const port = configService.get<string>('PORT') || 3001;
+  app.use(helmet());
+  app.enableCors();
+  app.enableShutdownHooks();
+
+  await app.listen(port, () => {
+    console.debug(`API Ferramas listening at port ${port} `);
+  });
 }
 bootstrap();
