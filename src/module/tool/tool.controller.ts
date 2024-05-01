@@ -26,6 +26,11 @@ export class ToolController {
     return this.toolService.findByFilter(name, value);
   }
 
+  @Get('category')
+  getCategory() {
+    return this.toolService.getCategory();
+  }
+
   // @Patch(':id')
   // update(@Param('id') id: string, @Body() updateToolDto: UpdateToolDto) {
   //   return this.toolService.update(+id, updateToolDto);
