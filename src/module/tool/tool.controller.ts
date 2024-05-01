@@ -16,9 +16,14 @@ export class ToolController {
     return this.toolService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.toolService.findByFilter(+id);
+  // @Get(':id')
+  // findOne(@Param('id') id: string) {
+  //   return this.toolService.findByFilter(+id);
+  // }
+
+  @Get('filter/:name/:value')
+  findByFilter(@Param('name') name: string, @Param('value') value: string) {
+    return this.toolService.findByFilter(name, value);
   }
 
   // @Patch(':id')
