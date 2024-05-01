@@ -6,6 +6,7 @@ import {
   FirestoreOptionsProvider,
 } from './firebase.provider';
 import { ToolCollection } from './collection/tool.collection';
+import { CategoryCollection } from './collection/category.collection';
 
 type FirestoreModuleOptions = {
   imports: any[];
@@ -16,9 +17,11 @@ type FirestoreModuleOptions = {
 @Module({
   providers: [
     ToolCollection,
+    CategoryCollection,
   ],
   exports: [
     ToolCollection,
+    CategoryCollection,
   ],
 })
 

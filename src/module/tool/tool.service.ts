@@ -5,11 +5,13 @@ import { ToolCollection } from 'src/database/firestore/collection/tool.collectio
 import { toTool } from './map/tool.map';
 import { CustomResponse } from 'src/common/response/response.map';
 import { FILTERS, validateCategoryFilter } from './map/filter.map';
+import { CategoryCollection } from 'src/database/firestore/collection/category.collection';
 
 @Injectable()
 export class ToolService {
   constructor(
-    private readonly toolCollection: ToolCollection
+    private readonly toolCollection: ToolCollection,
+    private readonly categoryCollection: CategoryCollection
   ) {}
 
   create(createToolDto: CreateToolDto) {
@@ -36,6 +38,16 @@ export class ToolService {
     const response = await this.toolCollection.getByCategory(filter);
     const _res = response.map((element) => {
       return toTool(element);
+    });
+    return new CustomResponse({ code: '200', message: 'OK' }, _res);
+  }
+  async getCategory() {
+    const response = await this.categoryCollection.getCategories();
+    const _res = response.map((element) => {
+      return {
+        id: element._id,
+        name: element.c_name,
+      }
     });
     return new CustomResponse({ code: '200', message: 'OK' }, _res);
   }
