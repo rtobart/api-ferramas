@@ -3,6 +3,15 @@ import { HttpCustomService } from './httpCustom.service';
 import { ConfigService } from '@nestjs/config';
 import { lastValueFrom } from 'rxjs';
 
+type Moneda = {
+  Valor: string;
+  Fecha: string;
+};
+
+type ObjetoMoneda = {
+  Dolares: Moneda[];
+};
+
 @Injectable()
 export class CentralBankService {
   URL: string = 'https://api.cmfchile.cl/api-sbifv3/recursos_api/';
@@ -11,8 +20,7 @@ export class CentralBankService {
     private httpService: HttpCustomService,
     private readonly configService: ConfigService,
   ) {}
-
-  async getDollarPrice(): Promise<string> {
+  async getTodayDollarData(): Promise<ObjetoMoneda> {
     const resource = 'dolar';
     const dates = this.getRelevantDates();
     const query = `?apikey=${this.CMF_API_KEY}&formato=json`;

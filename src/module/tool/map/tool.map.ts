@@ -1,14 +1,15 @@
 import { ToolEntity } from 'src/database/firestore/entity/tool.entity';
 import { Tool } from '../entities/tool.entity';
 
-export function mapTool(toolEntity: ToolEntity): Tool {
+export function mapTool(toolEntity: ToolEntity, dollarPrice: number): Tool {
   return {
     sku: toolEntity.s_sku,
     activo: toolEntity.b_active,
     precio: toolEntity.a_price.map((price) => ({
       actual: price.b_current,
+      USD: Math.round(price.i_value / dollarPrice),
       fecha_actualizacion_precio: price.d_add_price_date,
-      valor: price.i_value,
+      CLP: price.i_value,
     })),
     categoria: toolEntity.a_category,
     codigo_producto: toolEntity.s_cod_product,

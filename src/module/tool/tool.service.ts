@@ -6,12 +6,14 @@ import { mapTool } from './map/tool.map';
 import { CustomResponse } from 'src/common/response/response.map';
 import { FILTERS, validateCategoryFilter } from './map/filter.map';
 import { CategoryCollection } from 'src/database/firestore/collection/category.collection';
+import { CentralBankService } from 'src/common/services/CentralBank.service';
 
 @Injectable()
 export class ToolService {
   constructor(
     private readonly toolCollection: ToolCollection,
-    private readonly categoryCollection: CategoryCollection
+    private readonly categoryCollection: CategoryCollection,
+    private readonly centralBankService: CentralBankService,
   ) {}
 
   create(createToolDto: CreateToolDto) {
@@ -20,8 +22,10 @@ export class ToolService {
 
   async findAll() {
     const response = await this.toolCollection.getTools();
+    const dollarData = await this.centralBankService.getTodayDollarData();
+    const todayDollarRate = parseInt(dollarData.Dolares[0].Valor);
     const _res = response.map((element) => {
-      return mapTool(element);
+      return mapTool(element,todayDollarRate);
     });
     return new CustomResponse({ code: '200', message: 'OK' }, _res);
   }
@@ -35,15 +39,19 @@ export class ToolService {
   }
   async findByName(filter: string) {
     const response = await this.toolCollection.getByName(filter);
+    const dollarData = await this.centralBankService.getTodayDollarData();
+    const todayDollarRate = parseInt(dollarData.Dolares[0].Valor);
     const _res = response.map((element) => {
-      return mapTool(element);
+      return mapTool(element,todayDollarRate);
     });
     return new CustomResponse({ code: '200', message: 'OK' }, _res);
   }
   async findByCategory(filter: string) {
     const response = await this.toolCollection.getByCategory(filter);
+    const dollarData = await this.centralBankService.getTodayDollarData();
+    const todayDollarRate = parseInt(dollarData.Dolares[0].Valor);
     const _res = response.map((element) => {
-      return mapTool(element);
+      return mapTool(element,todayDollarRate);
     });
     return new CustomResponse({ code: '200', message: 'OK' }, _res);
   }
