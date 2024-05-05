@@ -14,6 +14,7 @@ export class Tool {
   class Precio {
     actual: boolean;
     fecha_actualizacion_precio: string;
-    valor: number;
+    CLP: number;
+    USD: number;
   }
   

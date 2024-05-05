@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { FirestoreModule } from './database/firestore/firestore.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { googleServiceAccount } from './common/util/serviceAccount.map';
 import { ToolModule } from './module/tool/tool.module';
+import { AuthModule } from './module/auth/auth.module';
+import { ServicesModule } from './common/services/services.module';
 import config from './common/env/config.env';
 import * as Joi from 'joi';
 
@@ -35,9 +35,11 @@ import * as Joi from 'joi';
         TIME_OUT: Joi.number().default(60000),
       }),
     }),
+    ServicesModule,
     ToolModule,
+    AuthModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}
