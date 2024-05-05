@@ -2,7 +2,7 @@ import { HttpException, Injectable } from '@nestjs/common';
 import { CreateToolDto } from './dto/create-tool.dto';
 import { UpdateToolDto } from './dto/update-tool.dto';
 import { ToolCollection } from 'src/database/firestore/collection/tool.collection';
-import { toTool } from './map/tool.map';
+import { mapTool } from './map/tool.map';
 import { CustomResponse } from 'src/common/response/response.map';
 import { FILTERS, validateCategoryFilter } from './map/filter.map';
 import { CategoryCollection } from 'src/database/firestore/collection/category.collection';
@@ -21,7 +21,7 @@ export class ToolService {
   async findAll() {
     const response = await this.toolCollection.getTools();
     const _res = response.map((element) => {
-      return toTool(element);
+      return mapTool(element);
     });
     return new CustomResponse({ code: '200', message: 'OK' }, _res);
   }
@@ -29,15 +29,21 @@ export class ToolService {
   findByFilter(filterName: string, filterValue: string) {
     const filter = validateCategoryFilter(filterName);
     if (!filter) throw new HttpException('Invalid filter', 400);
-    if (filter === FILTERS.CATEGORY) {
-      return this.findByCategory(filterValue);
-    }
+    if (filter === FILTERS.CATEGORY) return this.findByCategory(filterValue);
+    if (filter === FILTERS.NAME) return this.findByName(filterValue);
     throw new HttpException('NOT FOUND', 404);
+  }
+  async findByName(filter: string) {
+    const response = await this.toolCollection.getByName(filter);
+    const _res = response.map((element) => {
+      return mapTool(element);
+    });
+    return new CustomResponse({ code: '200', message: 'OK' }, _res);
   }
   async findByCategory(filter: string) {
     const response = await this.toolCollection.getByCategory(filter);
     const _res = response.map((element) => {
-      return toTool(element);
+      return mapTool(element);
     });
     return new CustomResponse({ code: '200', message: 'OK' }, _res);
   }

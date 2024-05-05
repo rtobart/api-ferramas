@@ -29,6 +29,28 @@ export class ToolCollection {
       throw new Error('Firebase Error: ' + JSON.stringify(e.message));
     }
   }
+  async getByName(name: string){
+    try {
+      const snapshot = await this.toolEntity
+      .where('s_name', '>=', name.toUpperCase())
+      .get();
+
+      if (snapshot.empty) {
+        throw new HttpException('NOT FOUND', 404);
+      }
+
+      return snapshot.docs.map((element) => {
+        const data: ToolEntity = {
+          _id: element.id,
+          ...element.data(),
+        };
+        return data;
+      });
+    } catch (e: any) {
+      console.error(JSON.stringify(e));
+      throw new HttpException('NOT FOUND', 404);
+    }
+  }
   async getByCategory(category: string){
     try {
       const snapshot = await this.toolEntity

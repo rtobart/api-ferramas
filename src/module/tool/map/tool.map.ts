@@ -1,7 +1,7 @@
 import { ToolEntity } from 'src/database/firestore/entity/tool.entity';
 import { Tool } from '../entities/tool.entity';
 
-export function toTool(toolEntity: ToolEntity): Tool {
+export function mapTool(toolEntity: ToolEntity): Tool {
   return {
     sku: toolEntity.s_sku,
     activo: toolEntity.b_active,
