@@ -5,6 +5,7 @@ import { googleServiceAccount } from './common/util/serviceAccount.map';
 import { ToolModule } from './module/tool/tool.module';
 import { AuthModule } from './module/auth/auth.module';
 import { ServicesModule } from './common/services/services.module';
+import { ShopingCartModule } from './module/shoping-cart/shoping-cart.module';
 import config from './common/env/config.env';
 import * as Joi from 'joi';
 
@@ -38,6 +39,7 @@ import * as Joi from 'joi';
     ServicesModule,
     ToolModule,
     AuthModule,
+    ShopingCartModule,
   ],
   controllers: [],
   providers: [],
