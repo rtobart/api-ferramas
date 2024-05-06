@@ -45,19 +45,17 @@ export class CentralBankService {
   getRelevantDates(): { today: any; lastFriday?: any; nextMonday?: any } {
     const today = new Date();
     const dayOfWeek = today.getDay();
-
+    const response = {
+      today: this.formatQueryDates(today),
+    }
     if (dayOfWeek === 6 || dayOfWeek === 0) {
       const lastFriday = new Date(today);
       lastFriday.setDate(today.getDate() - (dayOfWeek === 6 ? 1 : 2));
-
       const nextMonday = new Date(today);
       nextMonday.setDate(today.getDate() + (dayOfWeek === 6 ? 2 : 1));
-
-      return {
-        today: this.formatQueryDates(today),
-        lastFriday: this.formatQueryDates(lastFriday),
-        nextMonday: this.formatQueryDates(nextMonday),
-      };
+      response['lastFriday'] = this.formatQueryDates(lastFriday)
+      response['nextMonday'] = this.formatQueryDates(lastFriday)
     }
+    return response;
   }
 }
