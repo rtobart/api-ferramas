@@ -44,15 +44,16 @@ export class CentralBankService {
   }
   getRelevantDates(): { today: any; lastFriday?: any; nextMonday?: any } {
     const today = new Date();
-    const dayOfWeek = today.getDay();
+    const todayUTClessFour = new Date(Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate()));
+    const dayOfWeek = todayUTClessFour.getDay();
     const response = {
-      today: this.formatQueryDates(today),
+      today: this.formatQueryDates(todayUTClessFour),
     }
     if (dayOfWeek === 6 || dayOfWeek === 0) {
-      const lastFriday = new Date(today);
-      lastFriday.setDate(today.getDate() - (dayOfWeek === 6 ? 1 : 2));
-      const nextMonday = new Date(today);
-      nextMonday.setDate(today.getDate() + (dayOfWeek === 6 ? 2 : 1));
+      const lastFriday = new Date(todayUTClessFour);
+      lastFriday.setDate(todayUTClessFour.getDate() - (dayOfWeek === 6 ? 1 : 2));
+      const nextMonday = new Date(todayUTClessFour);
+      nextMonday.setDate(todayUTClessFour.getDate() + (dayOfWeek === 6 ? 2 : 1));
       response['lastFriday'] = this.formatQueryDates(lastFriday)
       response['nextMonday'] = this.formatQueryDates(lastFriday)
     }
