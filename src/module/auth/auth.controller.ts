@@ -10,7 +10,6 @@ export class AuthController {
   @Post()
   createToken(@Body() createAuthDto: CreateAuthDto) {
     return this.authService.createToken(createAuthDto);
-
   }
 
   @Post('/register')
