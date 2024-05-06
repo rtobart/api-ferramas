@@ -23,7 +23,6 @@ export class CentralBankService {
   async getTodayDollarData(): Promise<ObjetoMoneda> {
     const resource = 'dolar';
     const dates = this.getRelevantDates();
-    console.log('🚀 ~ CentralBankService ~ getTodayDollarData ~ dates:', dates)
     const query = `?apikey=${this.CMF_API_KEY}&formato=json`;
     let request = `${resource}${query}`;
     let _response = this.httpService.get(this.URL, {
@@ -46,7 +45,6 @@ export class CentralBankService {
     const today = new Date();
     const offset = today.getTimezoneOffset() / 60 + 4;
     const todayUTC4 = new Date(today.setHours(today.getHours() - offset));
-    // const todayUTC4 = new Date(Date.UTC(today.getFullYear(), today.getMonth(), today.getDate()));
     const dayOfWeek = todayUTC4.getDay();
     const response = {
       today: this.formatQueryDates(todayUTC4),
