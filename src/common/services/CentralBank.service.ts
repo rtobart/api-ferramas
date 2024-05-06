@@ -23,6 +23,7 @@ export class CentralBankService {
   async getTodayDollarData(): Promise<ObjetoMoneda> {
     const resource = 'dolar';
     const dates = this.getRelevantDates();
+    console.log('🚀 ~ CentralBankService ~ getTodayDollarData ~ dates:', dates)
     const query = `?apikey=${this.CMF_API_KEY}&formato=json`;
     let request = `${resource}${query}`;
     let _response = this.httpService.get(this.URL, {
