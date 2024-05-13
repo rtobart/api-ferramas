@@ -33,6 +33,7 @@ export class ToolCollection {
     try {
       const snapshot = await this.toolEntity
       .where('s_name', '>=', name.toUpperCase())
+      .where('s_name', '<=', name.toUpperCase() + '\uf8ff')
       .get();
 
       if (snapshot.empty) {
