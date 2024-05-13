@@ -12,7 +12,7 @@ export class UserCollection {
   ) {}
 async registerUser(registerUserDto: RegisterUserDto) {
   try {
-      const password = await bcrypt.hash(registerUserDto.password, 10);
+        const password = await bcrypt.hash(registerUserDto.password, 10);
         const newUser: UserEntity = {
             s_mail: registerUserDto.mail,
             h_password: password,
