@@ -1,10 +1,14 @@
 import { Inject, Injectable } from '@nestjs/common';
+import { ConfigType } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
+import config from 'src/common/env/config.env';
 
 @Injectable()
 export class JwtCustomService {
   constructor(
     private readonly jwtService: JwtService,
+    @Inject(config.KEY)
+    private readonly configService: ConfigType<typeof config>,
   ) {}
   getPayload(jwt: string) {
     const auth = this.trimJWT(jwt);
@@ -20,9 +24,9 @@ export class JwtCustomService {
   }
   signToken(payload: any): string {
     return this.jwtService.sign(payload, {
-      privateKey: process.env.JWT_PRIVATE_KEY,
-      expiresIn: process.env.JWT_EXPIRE_TIME,
-      algorithm: 'RS256',
+      privateKey: this.configService.jwt.privateKey,
+      expiresIn: this.configService.jwt.expiresIn,
+      algorithm: 'HS256',
     });
   }
   validate(jwt: string): boolean {

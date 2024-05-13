@@ -35,7 +35,17 @@ export class ToolService {
     if (!filter) throw new HttpException('Invalid filter', 400);
     if (filter === FILTERS.CATEGORY) return this.findByCategory(filterValue);
     if (filter === FILTERS.NAME) return this.findByName(filterValue);
+    if (filter === FILTERS.BRAND) return this.findByName(filterValue);
     throw new HttpException('NOT FOUND', 404);
+  }
+  async findByBrand(filter: string) {
+    const response = await this.toolCollection.getByBrand(filter);
+    const dollarData = await this.centralBankService.getTodayDollarData();
+    const todayDollarRate = parseInt(dollarData.Dolares[0].Valor);
+    const _res = response.map((element) => {
+      return mapTool(element,todayDollarRate);
+    });
+    return new CustomResponse({ code: '200', message: 'OK' }, _res);
   }
   async findByName(filter: string) {
     const response = await this.toolCollection.getByName(filter);

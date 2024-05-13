@@ -2,15 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { HttpCustomService } from './httpCustom.service';
 import { ConfigService } from '@nestjs/config';
 import { lastValueFrom } from 'rxjs';
-
-type Moneda = {
-  Valor: string;
-  Fecha: string;
-};
-
-type ObjetoMoneda = {
-  Dolares: Moneda[];
-};
+import { ObjetoMoneda } from '../interfaces/money.interface';
 
 @Injectable()
 export class CentralBankService {
