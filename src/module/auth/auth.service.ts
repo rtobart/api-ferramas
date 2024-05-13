@@ -31,7 +31,6 @@ export class AuthService {
     return this.userCollection.registerUser(registerUserDto);
   }
   signAccessToken(payload: any) {
-    console.log(this.configService.jwt.privateKey)
     return this.jwtService.sign(payload, {
       privateKey: this.configService.jwt.privateKey,
       expiresIn: this.configService.jwt.expiresIn,
