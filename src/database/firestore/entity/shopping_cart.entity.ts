@@ -1,6 +1,7 @@
 import { MetaDocument } from '../collection/meta/meta.collection,';
 
-export class CategoryEntity extends MetaDocument {
-  public static readonly collectionName = 'CM_CATEGORY';
-  c_name: string;
+export class ShoppingCartEntity extends MetaDocument {
+  public static readonly collectionName = 'CT_SHOPING_CART';
+  l_products: string[];
+  s_user_mail: string;
 }
