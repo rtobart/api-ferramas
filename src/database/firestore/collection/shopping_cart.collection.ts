@@ -1,32 +1,39 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { CollectionReference } from '@google-cloud/firestore';
-import { CategoryEntity } from '../entity/category.entity';
+import { ShoppingCartEntity } from '../entity/shopping_cart.entity';
 
 @Injectable()
-export class CategoryCollection {
+export class ShoppingCartCollection {
   constructor(
-    @Inject(CategoryEntity.collectionName)
-    private categoryEntity: CollectionReference<CategoryEntity>,
+    @Inject(ShoppingCartEntity.collectionName)
+    private shoppingCartCollection: CollectionReference<ShoppingCartEntity>,
   ) {}
-  async getCategories() {
+  async addShoppingCart(shoppingCart: ShoppingCartEntity): Promise<string> {
     try {
-      const snapshot = await this.categoryEntity
-      .get();
-
-      if (snapshot.empty) {
-        return;
-      }
-
-      return snapshot.docs.map((element) => {
-        const data: CategoryEntity = {
-          _id: element.id,
-          ...element.data(),
-        };
-        return data;
-      });
+      const docRef = await this.shoppingCartCollection.add(shoppingCart);
+      return docRef.id;
     } catch (e: any) {
       console.error(JSON.stringify(e));
       throw new Error('Firebase Error: ' + JSON.stringify(e.message));
     }
   }
+  async getShopingCartById(id: string): Promise<ShoppingCartEntity> {
+    try {
+      const snapshot = await this.shoppingCartCollection
+      .doc(id)
+      .get();
+
+      if (!snapshot.exists) {
+        return;
+      }
+      return {
+        _id: snapshot.id,
+        ...snapshot.data(),
+      };
+    } catch (e: any) {
+      console.error(JSON.stringify(e));
+      throw new Error('Firebase Error: ' + JSON.stringify(e.message));
+    }
+  }
+
 }

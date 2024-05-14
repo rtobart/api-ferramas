@@ -5,6 +5,7 @@ import * as bcrypt from 'bcrypt';
 import { UserCollection } from 'src/database/firestore/collection/use.collection';
 import { HttpErrorByCode } from '@nestjs/common/utils/http-error-by-code.util';
 import { JwtCustomService } from 'src/common/services/jwt.service';
+import { CustomResponse } from 'src/common/response/response.map';
 @Injectable()
 export class AuthService {
   SALT_ROUNDS = 10;
@@ -20,7 +21,8 @@ export class AuthService {
     const user = await this.userCollection.getUser(createAuthDto.mail);
     const validatePasswordHash = await bcrypt.compare(createAuthDto.password, user.h_password);
     if (!validatePasswordHash) return new HttpErrorByCode[401]();
-    return this.signAccessToken({mail: user.s_mail, shopingCartId: user.s_shoping_cart})
+    const token = this.signAccessToken({mail: user.s_mail, shopingCartId: user.s_shoping_cart})
+    return new CustomResponse({ code: '200', message: 'OK' }, token);
   }
   registerUser(registerUserDto: RegisterUserDto) {
     return this.userCollection.registerUser(registerUserDto);

@@ -8,6 +8,7 @@ import {
 import { ToolCollection } from './collection/tool.collection';
 import { CategoryCollection } from './collection/category.collection';
 import { UserCollection } from './collection/use.collection';
+import { ShoppingCartCollection } from './collection/shopping_cart.collection';
 
 type FirestoreModuleOptions = {
   imports: any[];
@@ -20,11 +21,13 @@ type FirestoreModuleOptions = {
     ToolCollection,
     CategoryCollection,
     UserCollection,
+    ShoppingCartCollection
   ],
   exports: [
     ToolCollection,
     CategoryCollection,
     UserCollection,
+    ShoppingCartCollection
   ],
 })
 

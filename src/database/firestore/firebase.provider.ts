@@ -1,4 +1,5 @@
 import { CategoryEntity } from "./entity/category.entity"
+import { ShoppingCartEntity } from "./entity/shopping_cart.entity"
 import { ToolEntity } from "./entity/tool.entity"
 import { UserEntity } from "./entity/user.entity"
 
@@ -8,4 +9,5 @@ export const FirestoreCollectionProviders: string[] = [
     ToolEntity.collectionName,
     CategoryEntity.collectionName,
     UserEntity.collectionName,
+    ShoppingCartEntity.collectionName,
 ]
