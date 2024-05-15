@@ -5,7 +5,7 @@ import { JwtAuthGuard } from 'src/common/guard/jwt-auth.guard';
 import { CreateShoppingCartDTO } from './dto/create.dto';
 
 @Controller('shoping-cart')
-@UseGuards(JwtAuthGuard)
+// @UseGuards(JwtAuthGuard)
 // @UseInterceptors(CryptoInterceptor)
 export class ShopingCartController {
   constructor(private readonly shopingCartService: ShopingCartService) {}
