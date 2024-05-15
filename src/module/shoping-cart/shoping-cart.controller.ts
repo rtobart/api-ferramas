@@ -14,7 +14,7 @@ export class ShopingCartController {
     return this.shopingCartService.addShoppingCart(createShopping);
   }
   @Get(':id')
-  findAll(
+  findById(
     @Param('id') id: string,
   ) {
     return this.shopingCartService.findId(id);

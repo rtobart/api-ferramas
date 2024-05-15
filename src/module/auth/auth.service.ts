@@ -24,8 +24,10 @@ export class AuthService {
     const token = this.signAccessToken({mail: user.s_mail, shopingCartId: user.s_shoping_cart})
     return new CustomResponse({ code: '200', message: 'OK' }, token);
   }
-  registerUser(registerUserDto: RegisterUserDto) {
-    return this.userCollection.registerUser(registerUserDto);
+  async registerUser(registerUserDto: RegisterUserDto) {
+    const user = await this.userCollection.registerUser(registerUserDto);
+    const token = this.signAccessToken({mail: user.s_mail, shopingCartId: user.s_shoping_cart})
+    return new CustomResponse({ code: '200', message: 'OK' }, token);
   }
   signAccessToken(payload: any) {
     return this.jwtService.signToken(payload);
