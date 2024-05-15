@@ -20,7 +20,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       secretOrKey: configService.jwt.publicKey,
-      algorithms: ['RS256'],
+      algorithms: ['HS256'],
       ignoreExpiration: false,
       passReqToCallback: true,
     });
