@@ -8,6 +8,7 @@ import { ServicesModule } from './common/services/services.module';
 import { ShopingCartModule } from './module/shoping-cart/shoping-cart.module';
 import config from './common/env/config.env';
 import * as Joi from 'joi';
+import { JwtStrategy } from './common/strategies/jwt.strategy';
 
 
 @Module({
@@ -42,6 +43,6 @@ import * as Joi from 'joi';
     ShopingCartModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [JwtStrategy],
 })
 export class AppModule {}
