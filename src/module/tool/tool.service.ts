@@ -7,6 +7,7 @@ import { CustomResponse } from 'src/common/response/response.map';
 import { FILTERS, validateCategoryFilter } from './map/filter.map';
 import { CategoryCollection } from 'src/database/firestore/collection/category.collection';
 import { CentralBankService } from 'src/common/services/CentralBank.service';
+import { StockCollection } from 'src/database/firestore/collection/stock.collection';
 
 @Injectable()
 export class ToolService {
@@ -14,6 +15,7 @@ export class ToolService {
     private readonly toolCollection: ToolCollection,
     private readonly categoryCollection: CategoryCollection,
     private readonly centralBankService: CentralBankService,
+    private readonly stockCollection: StockCollection,
   ) {}
 
   create(createToolDto: CreateToolDto) {
@@ -21,11 +23,12 @@ export class ToolService {
   }
 
   async findAll() {
+    const stocks = await this.stockCollection.getStocks();
     const response = await this.toolCollection.getTools();
     const dollarData = await this.centralBankService.getTodayDollarData();
     const todayDollarRate = parseInt(dollarData.Dolares[0].Valor);
     const _res = response.map((element) => {
-      return mapTool(element,todayDollarRate);
+      return mapTool(element, todayDollarRate, stocks);
     });
     return new CustomResponse({ code: '200', message: 'OK' }, _res);
   }
@@ -39,29 +42,32 @@ export class ToolService {
     throw new HttpException('NOT FOUND', 404);
   }
   async findByBrand(filter: string) {
+    const stocks = await this.stockCollection.getStocks();
     const response = await this.toolCollection.getByBrand(filter);
     const dollarData = await this.centralBankService.getTodayDollarData();
     const todayDollarRate = parseInt(dollarData.Dolares[0].Valor);
     const _res = response.map((element) => {
-      return mapTool(element,todayDollarRate);
+      return mapTool(element, todayDollarRate, stocks);
     });
     return new CustomResponse({ code: '200', message: 'OK' }, _res);
   }
   async findByName(filter: string) {
+    const stocks = await this.stockCollection.getStocks();
     const response = await this.toolCollection.getByName(filter);
     const dollarData = await this.centralBankService.getTodayDollarData();
     const todayDollarRate = parseInt(dollarData.Dolares[0].Valor);
     const _res = response.map((element) => {
-      return mapTool(element,todayDollarRate);
+      return mapTool(element, todayDollarRate, stocks);
     });
     return new CustomResponse({ code: '200', message: 'OK' }, _res);
   }
   async findByCategory(filter: string) {
+    const stocks = await this.stockCollection.getStocks();
     const response = await this.toolCollection.getByCategory(filter);
     const dollarData = await this.centralBankService.getTodayDollarData();
     const todayDollarRate = parseInt(dollarData.Dolares[0].Valor);
     const _res = response.map((element) => {
-      return mapTool(element,todayDollarRate);
+      return mapTool(element, todayDollarRate, stocks);
     });
     return new CustomResponse({ code: '200', message: 'OK' }, _res);
   }

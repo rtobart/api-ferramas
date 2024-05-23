@@ -1,7 +1,9 @@
 import { ToolEntity } from 'src/database/firestore/entity/tool.entity';
 import { Tool } from '../entities/tool.entity';
+import { StockEntity } from 'src/database/firestore/entity/stock.entity';
 
-export function mapTool(toolEntity: ToolEntity, dollarPrice: number): Tool {
+export function mapTool(toolEntity: ToolEntity, dollarPrice: number, stock: StockEntity[]): Tool {
+  const stockItem = stock.find(stockItem => stockItem.c_tool === toolEntity._id);
   return {
     sku: toolEntity.s_sku,
     activo: toolEntity.b_active,
@@ -18,5 +20,6 @@ export function mapTool(toolEntity: ToolEntity, dollarPrice: number): Tool {
     imagen: toolEntity.s_image,
     descripcion: toolEntity.s_description,
     fecha_creacion: toolEntity.d_create_date,
+    stock: stockItem.n_value,
   };
 }
