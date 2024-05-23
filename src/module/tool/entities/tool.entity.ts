@@ -9,6 +9,7 @@ export class Tool {
     imagen: string;
     descripcion: string;
     fecha_creacion: string;
+    stock: number;
   }
   
   class Precio {

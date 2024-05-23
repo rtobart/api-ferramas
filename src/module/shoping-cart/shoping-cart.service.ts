@@ -4,12 +4,14 @@ import { CreateShoppingCartDTO } from './dto/create.dto';
 import { CustomResponse } from 'src/common/response/response.map';
 import { mapTool } from '../tool/map/tool.map';
 import { CentralBankService } from 'src/common/services/CentralBank.service';
+import { StockCollection } from 'src/database/firestore/collection/stock.collection';
 
 @Injectable()
 export class ShopingCartService {
   constructor(
     private readonly shoppingCartCollection: ShoppingCartCollection,
     private readonly centralBankService: CentralBankService,
+    private readonly stockCollection: StockCollection,
   ) {}
   async addShoppingCart(shoppingCart: {products: string[], user: string}) {
     const cart = {
@@ -25,10 +27,11 @@ export class ShopingCartService {
     }
   }
   async findId(id: string) {
+    const stocks = await this.stockCollection.getStocks();
     const dollarData = await this.centralBankService.getTodayDollarData();
     const todayDollarRate = parseInt(dollarData.Dolares[0].Valor);
     const data = ((await this.shoppingCartCollection.getShopingCartById2(id))['products']).map((element) => {
-      return mapTool(element,todayDollarRate);
+      return mapTool(element, todayDollarRate, stocks);
     });
     return new CustomResponse({ code: '200', message: 'OK' }, data);
   }
