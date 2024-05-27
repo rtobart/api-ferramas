@@ -19,4 +19,14 @@ export class ShopingCartController {
   ) {
     return this.shopingCartService.findId(id);
   }
+  @Get('/mail/:mail')
+  findByMail(
+    @Param('mail') mail: string,
+  ) {
+    return this.shopingCartService.findByMail(mail);
+  }
+  @Post('add')
+  addToShoppingCart(@Body() item: {mail: string, tools: string[]} ) {
+    return this.shopingCartService.addToShoppingCart(item);
+  }
 }

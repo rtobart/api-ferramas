@@ -22,6 +22,8 @@ export class AuthService {
     const validatePasswordHash = await bcrypt.compare(createAuthDto.password, user.h_password);
     if (!validatePasswordHash) return new HttpErrorByCode[401]();
     const token = this.signAccessToken({mail: user.s_mail, shopingCartId: user.s_shoping_cart})
+    const validate = await this.jwtService.validate(token);
+    console.log('🚀 ~ AuthService ~ createToken ~ validate:', validate)
     return new CustomResponse({ code: '200', message: 'OK' }, token);
   }
   async registerUser(registerUserDto: RegisterUserDto) {
@@ -29,7 +31,12 @@ export class AuthService {
     const token = this.signAccessToken({mail: user.s_mail, shopingCartId: user.s_shoping_cart})
     return new CustomResponse({ code: '200', message: 'OK' }, token);
   }
+  async existUser(mail: string) {
+    const user = await this.userCollection.getUser(mail) ? true : false;
+    return new CustomResponse({ code: '200', message: 'OK' }, user)
+  }
   signAccessToken(payload: any) {
-    return this.jwtService.signToken(payload);
+    const token = this.jwtService.signToken(payload);
+    return token;
   }
 }

@@ -20,6 +20,33 @@ export class ShoppingCartCollection {
       throw new Error('Firebase Error: ' + JSON.stringify(e.message));
     }
   }
+  async addToShoppingCart(shoppingCart: ShoppingCartEntity): Promise<void> {
+    try {
+      await this.shoppingCartCollection.doc(shoppingCart._id).set(shoppingCart);
+    } catch (e: any) {
+      console.error(JSON.stringify(e));
+      throw new Error('Firebase Error: ' + JSON.stringify(e.message));
+    }
+  }
+  async getByMail(mail: string): Promise<ShoppingCartEntity> {
+    try {
+      const snapshot = await this.shoppingCartCollection
+      .where('s_user_mail', '==', mail)
+      .get();
+
+      if (snapshot.empty) {
+        return;
+      }
+
+      return {
+        _id: snapshot.docs[0].id,
+        ...snapshot.docs[0].data(),
+      };
+    } catch (e: any) {
+      console.error(JSON.stringify(e));
+      throw new Error('Firebase Error: ' + JSON.stringify(e.message));
+    }
+  }
   async getShopingCartById(id: string): Promise<ShoppingCartEntity> {
     try {
       const snapshot = await this.shoppingCartCollection

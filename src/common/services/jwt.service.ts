@@ -29,13 +29,8 @@ export class JwtCustomService {
       algorithm: 'HS256',
     });
   }
-  validate(jwt: string): boolean {
-    const auth = this.trimJWT(jwt);
-    try {
-      this.jwtService.verify(auth);
-      return true;
-    } catch (error) {
-      return false;
-    }
+  validate(token: string): boolean {
+    const isValid = this.jwtService.verify(token, { secret: this.configService.jwt.privateKey })
+    return isValid ? true : false;
   }
 }

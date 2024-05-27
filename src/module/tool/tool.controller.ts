@@ -29,7 +29,7 @@ export class ToolController {
   @Get('category')
   getCategory() {
     return this.toolService.getCategory();
-  }
+  }  
 
   // @Patch(':id')
   // update(@Param('id') id: string, @Body() updateToolDto: UpdateToolDto) {

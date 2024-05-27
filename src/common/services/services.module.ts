@@ -6,11 +6,14 @@ import { LoggerService } from './logger.service';
 import { CipherService } from './cipher.service';
 import { JwtCustomService } from './jwt.service';
 import { JwtModule } from '@nestjs/jwt';
+import { WebPayService } from './webpay.service';
+import { TransactionController } from 'src/module/transaction/transaction.controller';
 
-const SERVICES = [CentralBankService, HttpCustomService, LoggerService, CipherService, JwtCustomService];
+const SERVICES = [WebPayService, CentralBankService, HttpCustomService, LoggerService, CipherService, JwtCustomService];
 
 @Global()
 @Module({
+  controllers: [TransactionController],
   imports: [ HttpModule, JwtModule ],
   providers: [ ...SERVICES ],
   exports: [ ... SERVICES ]
