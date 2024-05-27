@@ -34,16 +34,30 @@ export class ToolService {
   }
 
   findByFilter(filterName: string, filterValue: string) {
+    console.log('🚀 ~ ToolService ~ findByFilter ~ filterName:', filterName)
     const filter = validateCategoryFilter(filterName);
+    console.log('🚀 ~ ToolService ~ findByFilter ~ filter:', filter)
     if (!filter) throw new HttpException('Invalid filter', 400);
     if (filter === FILTERS.CATEGORY) return this.findByCategory(filterValue);
     if (filter === FILTERS.NAME) return this.findByName(filterValue);
-    if (filter === FILTERS.BRAND) return this.findByName(filterValue);
+    if (filter === FILTERS.BRAND) return this.findByBrand(filterValue);
+    if (filter === FILTERS.SKU) return this.findBySKU(filterValue);
     throw new HttpException('NOT FOUND', 404);
   }
   async findByBrand(filter: string) {
     const stocks = await this.stockCollection.getStocks();
     const response = await this.toolCollection.getByBrand(filter);
+    const dollarData = await this.centralBankService.getTodayDollarData();
+    const todayDollarRate = parseInt(dollarData.Dolares[0].Valor);
+    const _res = response.map((element) => {
+      return mapTool(element, todayDollarRate, stocks);
+    });
+    return new CustomResponse({ code: '200', message: 'OK' }, _res);
+  }
+  async findBySKU(filter: string) {
+    console.log('🚀 ~ ToolService ~ findBySKU ~ filter:', filter)
+    const stocks = await this.stockCollection.getStocks();
+    const response = await this.toolCollection.getBySKU(filter);
     const dollarData = await this.centralBankService.getTodayDollarData();
     const todayDollarRate = parseInt(dollarData.Dolares[0].Valor);
     const _res = response.map((element) => {
