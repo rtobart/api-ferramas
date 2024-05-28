@@ -24,13 +24,17 @@ export class WebPayService {
     private readonly shoppingCartCollection: ShoppingCartCollection,
     private readonly orderCollection: OrderCollection,
   ) {}
-  async onModuleInit() {
-    const res = await this.getCart('I8zT7Q4xXW1oLtaThgPC')
-    console.log('🚀 ~ WebPayService ~ onModuleInit ~ res:', res)
-  }
   async createTransaction(uyOrder, sessionId, amount, returnUrl, cartId) {
-    const res = await this.getCart('I8zT7Q4xXW1oLtaThgPC')
-    const orderId = await this.orderCollection.createOrder(res)
+    const res = await this.getCart(cartId)
+    const order = {
+      shoppingCart: res._id,
+      user: sessionId,
+      amount: amount,
+      products: res.l_products,
+      date: new Date(),
+      status: 'pending'
+    }
+    const orderId = await this.orderCollection.createOrder(order)
     const tx = new WebpayPlus.Transaction(
       new Options(
         IntegrationCommerceCodes.WEBPAY_PLUS,
@@ -38,14 +42,33 @@ export class WebPayService {
         Environment.Integration,
       ),
     );
-    const response = await tx.create(uyOrder, sessionId, amount, returnUrl);
+    try {
+      const response = await tx.create(uyOrder, sessionId, amount, `${returnUrl}${orderId}/${cartId}`);
+      return new CustomResponse({ code: '200', message: 'OK' }, response);
+    } catch(error) {
+      console.log('🚀 ~ WebPayService ~ createTransaction ~ error', error)
+      return new CustomResponse({ code: '500', message: '!' });
+    }
+
+  }
+  async commitTransaction(token: string) {
+    const tx = new WebpayPlus.Transaction(new Options(IntegrationCommerceCodes.WEBPAY_PLUS, IntegrationApiKeys.WEBPAY, Environment.Integration));
+    const response = await tx.commit(token);
     return new CustomResponse({ code: '200', message: 'OK' }, response);
+  }
+  async validateTransaction(order: string, cart: string) {
+    await this.scheduleOrder(order)
+    await this.clearShoppingCartProducts(cart)
+    return new CustomResponse({ code: '200', message: 'OK' })
+  }
+  async scheduleOrder(order_Id: string) {
+    await this.orderCollection.updateOrderStatus(order_Id)
+  }
+  async clearShoppingCartProducts(id: string) {
+    await this.shoppingCartCollection.clearShoppingCartProducts(id);
   }
   async getCart(id: string) {
     const cart = await this.shoppingCartCollection.getShopingCartById(id);
     return cart
   }
-  // async empntyCart(id:string){
-  //   await this.shoppingCartCollection.addToShoppingCart(id)
-  // }
 }

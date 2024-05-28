@@ -18,6 +18,15 @@ export class OrderCollection {
       throw new Error('Firebase Error: ' + JSON.stringify(e.message));
     }
   }
+  async updateOrderStatus(orderId: string) {
+    try {
+      const orderRef = this.orderEntity.doc(orderId);
+      await orderRef.update({ status: 'done' });
+    } catch (e: any) {
+      console.error(JSON.stringify(e));
+      throw new Error('Firebase Error: ' + JSON.stringify(e.message));
+    }
+  }
   async getStocks() {
     try {
       const snapshot = await this.orderEntity

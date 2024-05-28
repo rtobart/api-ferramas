@@ -28,6 +28,14 @@ export class ShoppingCartCollection {
       throw new Error('Firebase Error: ' + JSON.stringify(e.message));
     }
   }
+  async clearShoppingCartProducts(id: string): Promise<void> {
+    try {
+      await this.shoppingCartCollection.doc(id).update({ l_products: [] });
+    } catch (e: any) {
+      console.error(JSON.stringify(e));
+      throw new Error('Firebase Error: ' + JSON.stringify(e.message));
+    }
+  }
   async getByMail(mail: string): Promise<ShoppingCartEntity> {
     try {
       const snapshot = await this.shoppingCartCollection
